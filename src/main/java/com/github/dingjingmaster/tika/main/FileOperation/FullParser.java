@@ -1,5 +1,6 @@
 package com.github.dingjingmaster.tika.main.FileOperation;
 
+/*
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -307,3 +308,4 @@ public class FullParser implements Parser {
       this.tmpFilePath = path;
    }
 }
+*/

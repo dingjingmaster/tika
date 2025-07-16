@@ -1,7 +1,8 @@
 package com.github.dingjingmaster.tika.main.FileOperation;
 
-import com.github.dingjingmaster.tika.main.ndimporter.fingerprint.exception.NoFeatureInformationException;
-import com.github.dingjingmaster.tika.main.ndimporter.fingerprint.service.SimHashService;
+/*
+//import com.github.dingjingmaster.tika.main.ndimporter.fingerprint.exception.NoFeatureInformationException;
+//import com.github.dingjingmaster.tika.main.ndimporter.fingerprint.service.SimHashService;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -99,8 +100,8 @@ public class TikaFileExtractor {
          System.out.println("is encrypted:" + metadata.get(FullParser.IS_ENCRYPTED));
          System.out.println("file content:" + metadata.get(FullParser.CONTENT));
          System.out.println("save dir:" + this.getTmpFileFullPath(file));
-         String hash = this.calcSimHash(metadata.get(FullParser.CONTENT));
-         System.out.println("simhash:" + hash);
+//         String hash = this.calcSimHash(metadata.get(FullParser.CONTENT));
+//         System.out.println("simhash:" + hash);
       }
    }
 
@@ -358,18 +359,21 @@ public class TikaFileExtractor {
       }
    }
 
-   public String calcSimHash(String context) {
-      SimHashService sim = new SimHashService(4, 20);
-
-      try {
-         int len = context.length();
-         if (len > this.MAX_SIMHASH) {
-            len = this.MAX_SIMHASH;
-         }
-
-         return sim.simHash(context.substring(0, len)) + "";
-      } catch (NoFeatureInformationException var4) {
-         return "";
-      }
-   }
+//   public String calcSimHash(String context) {
+//      SimHashService sim = new SimHashService(4, 20);
+//
+//      try {
+//         int len = context.length();
+//         if (len > this.MAX_SIMHASH) {
+//            len = this.MAX_SIMHASH;
+//         }
+//
+//         return sim.simHash(context.substring(0, len)) + "";
+//      } catch (NoFeatureInformationException var4) {
+//         return "";
+//      }
+//   }
 }
+
+
+*/

@@ -6,16 +6,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
-import net.sf.sevenzipjbinding.IInArchive;
-import net.sf.sevenzipjbinding.SevenZip;
-import net.sf.sevenzipjbinding.SevenZipException;
-import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
-import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
-import net.sf.sevenzipjbinding.simple.impl.SimpleInArchiveImpl;
-import net.sf.sevenzipjbinding.util.ByteArrayStream;
+//import net.sf.sevenzipjbinding.IInArchive;
+//import net.sf.sevenzipjbinding.SevenZip;
+//import net.sf.sevenzipjbinding.SevenZipException;
+//import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
+//import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
+//import net.sf.sevenzipjbinding.simple.impl.SimpleInArchiveImpl;
+//import net.sf.sevenzipjbinding.util.ByteArrayStream;
 import org.apache.tika.io.TikaInputStream;
 
 public class Rar5Parser {
+   /*
    private String zipFile = null;
    private IInArchive archive = null;
    private RandomAccessFile randomAccessFile = null;
@@ -132,4 +133,5 @@ public class Rar5Parser {
          System.out.println("--------");
       }
    }
+   */
 }

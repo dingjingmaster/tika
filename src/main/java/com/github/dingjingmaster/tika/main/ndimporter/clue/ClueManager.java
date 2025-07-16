@@ -1,5 +1,6 @@
 package com.github.dingjingmaster.tika.main.ndimporter.clue;
 
+/*
 import com.github.dingjingmaster.tika.main.ndimporter.kwdmatch.LabelbyKeywords;
 import java.util.List;
 import java.util.Map;
@@ -45,3 +46,5 @@ public class ClueManager {
       }
    }
 }
+
+*/

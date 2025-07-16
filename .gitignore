@@ -1,4 +1,6 @@
 .idea
+target/
+dependency-reduced-pom.xml
 # Compiled class file
 *.class
 
