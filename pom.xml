@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.dingjingmaster.tika.main</groupId>
-    <artifactId>tika</artifactId>
+    <artifactId>tika-main</artifactId>
     <version>1.0.0</version>
-    <name>tika</name>
+    <name>tika-main</name>
     <dependencies>
         <dependency>
             <groupId>org.apache.tika</groupId>
