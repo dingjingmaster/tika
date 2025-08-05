@@ -1,6 +1,10 @@
 package com.github.dingjingmaster.tika.main.FileOperation;
 
 //import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.apache.poi.ss.formula.functions.T;
+import org.apache.tika.detect.EncodingDetector;
+import org.apache.tika.extractor.EmbeddedDocumentExtractor;
+import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
@@ -8,12 +12,17 @@ import org.apache.tika.parser.Parser;
 //import org.apache.tika.parser.RecursiveParserWrapper;
 import org.apache.tika.parser.ocr.TesseractOCRConfig;
 import org.apache.tika.parser.ocr.TesseractOCRParser;
+import org.apache.tika.parser.txt.CharsetDetector;
+import org.apache.tika.parser.txt.UniversalEncodingDetector;
 import org.apache.tika.sax.BodyContentHandler;
 import org.apache.tika.sax.ToXMLContentHandler;
 import org.apache.tika.sax.WriteOutContentHandler;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import com.github.dingjingmaster.tika.main.FileOperation.PaddleOCRParser;
 
@@ -40,17 +49,20 @@ public class AutoParser {
         }
 
         // 自动解析器
-        Parser parser = new AutoDetectParser();
+        Parser parser = new TikaAutoParser();
 
         // 元数据对象
         Metadata md = new Metadata();
 
         // 带上下文相关信息的ParseContext实例
         ParseContext ctx = new ParseContext();
-        ctx.set(TesseractOCRParser.class, new PaddleOCRParser());
-        ctx.set(Parser.class, parser);
 
-        try (FileInputStream fi = new FileInputStream(filePath)) {
+        ctx.set(Parser.class, parser);
+        ctx.set(TesseractOCRParser.class, new PaddleOCRParser());
+//        ctx.set(EncodingDetector.class, new TikaEncodingDetector());
+//        ctx.set(EmbeddedDocumentExtractor.class, new TikaEmbeddedDocumentExtractor());
+
+        try (InputStream fi = new BufferedInputStream(new FileInputStream(filePath))) {
             if (null != ctxFile) {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(ctxFile));
                 ToXMLContentHandler writeHandler = new CleanBreaksOutputHandler(writer);
@@ -90,8 +102,8 @@ public class AutoParser {
 //        String file = "/home/dingjing/aa.zip";
 //        String file = "/home/dingjing/aa.docx";
 //        String file = "/home/dingjing/Pictures/2025.png";
-//        String file = "/home/dingjing/Scan_1170800.log";
-        String file = "/home/dingjing/3thrd.config";
+        String file = "/home/dingjing/Scan_1170800.log";
+//        String file = "/home/dingjing/3thrd.config";
 //        String file = "/home/dingjing/Pictures/vim.png";
         AutoParser ap = new AutoParser();
 
