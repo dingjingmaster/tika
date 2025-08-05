@@ -6,17 +6,21 @@ import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 //import org.apache.tika.parser.RecursiveParserWrapper;
+import org.apache.tika.parser.ocr.TesseractOCRConfig;
+import org.apache.tika.parser.ocr.TesseractOCRParser;
 import org.apache.tika.sax.BodyContentHandler;
+import org.apache.tika.sax.ToXMLContentHandler;
 import org.apache.tika.sax.WriteOutContentHandler;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import com.github.dingjingmaster.tika.main.FileOperation.PaddleOCRParser;
 
 public class AutoParser {
     public AutoParser() {
         System.setSecurityManager(null);
-        System.setProperty("org.apache.tika.debug", "true");
+        System.setProperty("org.apache.tika.debug", "false");
         System.setProperty("tika.mimetypes", "org/apache/tika/mime/tika-mimetypes.xml");
     }
 
@@ -37,24 +41,26 @@ public class AutoParser {
 
         // 自动解析器
         Parser parser = new AutoDetectParser();
-//        RecursiveParserWrapper recuParser = new RecursiveParserWrapper(parser);
 
         // 元数据对象
         Metadata md = new Metadata();
 
         // 带上下文相关信息的ParseContext实例
         ParseContext ctx = new ParseContext();
+        ctx.set(TesseractOCRParser.class, new PaddleOCRParser());
+        ctx.set(Parser.class, parser);
 
         try (FileInputStream fi = new FileInputStream(filePath)) {
             if (null != ctxFile) {
-                Writer writer = new BufferedWriter(new FileWriter(ctxFile));
-                WriteOutContentHandler writeHandler = new WriteOutContentHandler(writer);
+                BufferedWriter writer = new BufferedWriter(new FileWriter(ctxFile));
+                ToXMLContentHandler writeHandler = new CleanBreaksOutputHandler(writer);
                 parser.parse(fi, writeHandler, md, ctx);
+                writer.close();
             }
             else {
                 BodyContentHandler memHandler = new BodyContentHandler(-1);
                 parser.parse(fi, memHandler, md, ctx);
-//                System.out.println("File content: " + memHandler);
+                System.out.println("File content: " + memHandler);
             }
 
             if (null != metaFile) {
@@ -82,7 +88,10 @@ public class AutoParser {
 //        String file = "/home/dingjing/andsec_3.2.14_amd64.deb";
 //        String file = "/home/dingjing/TrayApp.zip";
 //        String file = "/home/dingjing/aa.zip";
-        String file = "/home/dingjing/aa.docx";
+//        String file = "/home/dingjing/aa.docx";
+//        String file = "/home/dingjing/Pictures/2025.png";
+//        String file = "/home/dingjing/Scan_1170800.log";
+        String file = "/home/dingjing/3thrd.config";
 //        String file = "/home/dingjing/Pictures/vim.png";
         AutoParser ap = new AutoParser();
 
