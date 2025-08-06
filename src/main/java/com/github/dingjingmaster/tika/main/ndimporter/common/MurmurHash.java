@@ -14,7 +14,7 @@ public final class MurmurHash {
 
       for (int i = 0; i < length4; i++) {
          int i4 = i * 4;
-         int k = (data[i4 + 0] & 255) + ((data[i4 + 1] & 255) << 8) + ((data[i4 + 2] & 255) << 16) + ((data[i4 + 3] & 255) << 24);
+         int k = (data[i4] & 255) + ((data[i4 + 1] & 255) << 8) + ((data[i4 + 2] & 255) << 16) + ((data[i4 + 3] & 255) << 24);
          k *= 1540483477;
          k ^= k >>> 24;
          k *= 1540483477;
@@ -58,7 +58,7 @@ public final class MurmurHash {
 
       for (int i = 0; i < length8; i++) {
          int i8 = i * 8;
-         long k = ((long)data[i8 + 0] & 255L)
+         long k = ((long)data[i8] & 255L)
             + (((long)data[i8 + 1] & 255L) << 8)
             + (((long)data[i8 + 2] & 255L) << 16)
             + (((long)data[i8 + 3] & 255L) << 24)
@@ -87,7 +87,7 @@ public final class MurmurHash {
          case 2:
             h ^= (long)(data[(length & -8) + 1] & 255) << 8;
          case 1:
-            h ^= (long)(data[length & -8] & 255);
+            h ^= data[length & -8] & 255;
             h *= -4132994306676758123L;
          default:
             h ^= h >>> 47;
@@ -103,7 +103,7 @@ public final class MurmurHash {
    public static long hash64(String text) {
       byte[] bytes;
       try {
-         bytes = text.getBytes(new String("UTF8"));
+         bytes = text.getBytes("UTF8");
       } catch (UnsupportedEncodingException var3) {
          bytes = text.getBytes();
       }

@@ -6,15 +6,21 @@ import java.util.Set;
 
 import org.apache.tika.mime.MediaType;
 import org.apache.tika.parser.ocr.TesseractOCRParser;
-import org.bouncycastle.pqc.crypto.newhope.NHSecretKeyProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.ContentHandler;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.sax.XHTMLContentHandler;
-import org.apache.tika.parser.ocr.TesseractOCRConfig;
 
 
 public class PaddleOCRParser extends TesseractOCRParser {
+    private static final Logger log = LoggerFactory.getLogger(PaddleOCRParser.class);
+
+    PaddleOCRParser() {
+        super();
+    }
+
     @Override
     public Set<MediaType> getSupportedTypes(ParseContext context) {
         return supportedTypes;
@@ -22,12 +28,14 @@ public class PaddleOCRParser extends TesseractOCRParser {
 
     @Override
     public void parse(InputStream stream, ContentHandler handler, Metadata metaData, ParseContext context) {
+        System.out.println("[OCR]");
         try {
+            log.info("[OCR] start parse");
             String ocrText = callMyOCR(stream);
             XHTMLContentHandler xhtml = new XHTMLContentHandler(handler, metaData);
             xhtml.startDocument();
             xhtml.element("p", ocrText);
-            xhtml.endDocument();;
+            xhtml.endDocument();
         }
         catch (Exception e) {
             System.out.println("Parse OCR error!");

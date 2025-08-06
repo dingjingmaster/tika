@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <parsers>
+        <parser class="org.apache.tika.parser.DefaultParser">
+            <parser class="org.apache.tika.parser.ocr.TesseractOCRParser"/>
+        </parser>
+    </parsers>
+
+    <tika-ocr>
+        <tesseract>
+            <language>eng+chi_sim</language>
+            <ocrEngineMode>1</ocrEngineMode>
+            <pageSegMode>3</pageSegMode>
+            <tesseractPath>/usr/bin/tesseract</tesseractPath>
+            <tessdataPath>/usr/share/tessdata</tessdataPath>
+            <preserveInterwordSpacing>true</preserveInterwordSpacing>
+            <timeout>600000</timeout>
+        </tesseract>
+    </tika-ocr>
+</properties>

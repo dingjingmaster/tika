@@ -1,15 +1,15 @@
 package com.github.dingjingmaster.tika.main.FileOperation;
 
 import org.apache.tika.sax.ToXMLContentHandler;
-import org.apache.tika.sax.WriteOutContentHandler;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
+import org.jsoup.select.NodeVisitor;
 import org.xml.sax.*;
-import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.Writer;
 
 public class CleanBreaksOutputHandler extends ToXMLContentHandler {
     private final BufferedWriter writer;
@@ -37,7 +37,27 @@ public class CleanBreaksOutputHandler extends ToXMLContentHandler {
                 this.writer.write(title);
                 this.writer.newLine();
             }
-            String body = doc.body().text();
+            StringBuilder bodyStr = new StringBuilder();
+
+            doc.body().traverse(new NodeVisitor() {
+                @Override
+                public void head(Node node, int depth) {
+                    if (node instanceof TextNode) {
+                        bodyStr.append(((TextNode)node).text());
+                    }
+                    else if (node.nodeName().equals("br")
+                        || node.nodeName().equals("p")
+                        || node.nodeName().equals("div")) {
+                        bodyStr.append("\n");
+                    }
+                }
+                @Override
+                public void tail (Node node, int depth) {
+                    bodyStr.append("\n");
+                }
+            });
+
+            String body = bodyStr.toString();
             body = body.trim();
             if (!body.isEmpty()) {
                 this.writer.write(body);

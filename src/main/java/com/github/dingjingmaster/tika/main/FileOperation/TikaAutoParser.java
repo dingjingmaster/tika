@@ -1,10 +1,11 @@
 package com.github.dingjingmaster.tika.main.FileOperation;
 
+import org.apache.tika.config.TikaConfig;
+import org.apache.tika.mime.MediaTypeRegistry;
+import org.apache.tika.parser.CompositeParser;
 import org.apache.tika.parser.csv.TextAndCSVParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.tika.detect.EncodingDetector;
-import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
 import org.apache.tika.parser.AutoDetectParser;
@@ -15,11 +16,13 @@ import org.apache.tika.parser.txt.CharsetDetector;
 import java.io.IOException;
 import java.io.InputStream;
 
+
+// 主解析器
 public class TikaAutoParser extends AutoDetectParser {
     private final Logger logger = LoggerFactory.getLogger(TikaAutoParser.class);
 
-    TikaAutoParser() {
-        super();
+    TikaAutoParser(TikaConfig config) {
+        super(config);
     }
 
     @Override
@@ -29,12 +32,21 @@ public class TikaAutoParser extends AutoDetectParser {
         parser.parse(stream, handler, metaData, ctx);
     }
 
+    private Parser getParser(MediaType mediaType) {
+        String mediaTypeStr = mediaType.toString();
+        if (mediaTypeStr.startsWith("image/")) {
+            return new TikaOCRParser();
+        }
+
+        return getParsers().get(mediaType);
+    }
+
     private Parser getParser(InputStream stream, org.xml.sax.ContentHandler handler, Metadata metadata, ParseContext ctx)
             throws IOException {
         MediaType type = getDetector().detect(stream, metadata);
-        Parser parser = getParsers().get(type);
+        Parser parser = getParser(type);
         if (null != parser) {
-            logger.info("MediaType: {}, parser: {}", type, parser.getClass().getName());
+            logger.info("[DEF] MediaType: {}, parser: {}", type, parser.getClass().getName());
             return parser;
         }
 
@@ -43,19 +55,18 @@ public class TikaAutoParser extends AutoDetectParser {
         detector.setText(stream);
         String charsetName = detector.detect().getName();
         stream.reset();
-        if (null != charsetName) {
+        if (("octet-stream".equals(type.getSubtype())) && (null != charsetName)) {
             metadata.set(Metadata.CONTENT_ENCODING, charsetName);
-            MediaType gussType = MediaType.TEXT_PLAIN;
             parser = new TextAndCSVParser();
         }
         if (null != parser) {
-            logger.info("MediaType: {}, charset: {}, parser: {}", type, charsetName, parser.getClass().getName());
+            logger.info("[MY] MediaType: {}, charset: {}, parser: {}", type, charsetName, parser.getClass().getName());
             return parser;
         }
 
         // 最后实在没有找到合适的 parser
         parser = getFallback();
-        logger.info("MediaType: {}, parser: {}", type, parser.getClass().getName());
+        logger.info("[FIN] MediaType: {}, parser: {}", type, parser.getClass().getName());
 
         return parser;
     }
