@@ -1,5 +1,6 @@
 package com.github.dingjingmaster.tika.main.FileOperation;
 
+import com.github.dingjingmaster.tika.main.FileOperation.resource.TikaResource;
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.extractor.EmbeddedDocumentExtractor;
@@ -44,6 +45,13 @@ public class AutoParser {
                 metaFile = tmpDir + "/meta.txt";
             }
         }
+
+        System.out.println("meta file: " + metaFile);
+
+        Metadata meta = ParseMetaData.parseMetaData(filePath, metaFile);
+        System.out.println(meta);
+
+        /*
         Parser autoParser = null;
         TikaConfig tikaConfig = null;
         RecursiveParserWrapper parser = null;
@@ -108,7 +116,7 @@ public class AutoParser {
             ret = false;
             logger.warn("Read file {} error: {}", filePath, e.toString());
         }
-
+*/
         return ret;
     }
 
@@ -123,13 +131,14 @@ public class AutoParser {
 //        String file = "/home/dingjing/3thrd.config";
 //        String file = "/home/dingjing/Pictures/vim.png";
         AutoParser ap = new AutoParser();
+        final Logger logger = LoggerFactory.getLogger("main");
 
         try {
             if (!ap.parserFile(file, "/tmp/")) {
                 System.out.println("parser file: '" + file + "' failed!");
             }
         } catch (Exception e) {
-            System.out.println(e);
+            logger.warn("parse file error: {}", e.toString());
         }
     }
 }
